@@ -1,5 +1,5 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HTTP, HTTPResponse } from '@ionic-native/http/ngx';
 import { Course } from './course';
 import { Day } from './day';
 import { Event } from './event'
@@ -9,13 +9,14 @@ import { Event } from './event'
 })
 export class AurionService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HTTP) { }
 
   private domParser = new DOMParser();
 
   public async getName(): Promise<string> {
-    let page = await this.http.get('https://web.isen-ouest.fr/webAurion/faces/MainMenuPage.xhtml', { responseType: 'text', withCredentials: true }).toPromise();
-    let parsedPage = this.domParser.parseFromString(page, 'text/html');
+    this.http.setFollowRedirect(false);
+    let page = await this.http.get('https://web.isen-ouest.fr/webAurion/faces/MainMenuPage.xhtml', {}, {});
+    let parsedPage = this.domParser.parseFromString(page.data, 'text/html');
     let name = (<HTMLLIElement>parsedPage.getElementsByClassName("menuMonCompte")[0].getElementsByClassName("ui-widget-header")[0]).innerText;
     return name;
   }
@@ -59,46 +60,53 @@ export class AurionService {
   }
 
   public async fetchEdt(range: {start: Date, end: Date}): Promise<Day[]> {
-    const options = {
-      responseType: 'text' as const,
-      withCredentials: true,
-    };
+    this.http.setFollowRedirect(false);
 
     // Get viewstate and menuid
-    const payloadHomepage = new HttpParams().set('j', 'j');
-    let homepage = await this.http.post('https://web.isen-ouest.fr/webAurion/faces/MainMenuPage.xhtml', payloadHomepage, options).toPromise();
-    let parsedHomepage = this.domParser.parseFromString(homepage, 'text/html');
+    let homepage = await this.http.post('https://web.isen-ouest.fr/webAurion/faces/MainMenuPage.xhtml', {j: 'j'}, {});
+    let parsedHomepage = this.domParser.parseFromString(homepage.data, 'text/html');
     let viewstate = (<HTMLInputElement>parsedHomepage.getElementsByName('javax.faces.ViewState')[0]).value;
     let menuid = (<HTMLAnchorElement>parsedHomepage.getElementsByClassName("item_291892")[0]).getAttribute('onclick').split("'")[11];
 
     // Generate planning for current week (to get j_idt value)
-    const payloadPlanning = new HttpParams()
-      .set('form', 'form')
-      .set('form:largeurDivCenter', '898')
-      .set('javax.faces.ViewState', viewstate)
-      .set('form:sidebar_menuid', menuid)
-      .set('form:sidebar', 'form:sidebar')
-      .set('form:sauvegarde', '');
-    let planning = await this.http.post('https://web.isen-ouest.fr/webAurion/faces/MainMenuPage.xhtml', payloadPlanning, options).toPromise();
-    let parsedPlanning = this.domParser.parseFromString(planning, 'text/html');
+    let planning: HTTPResponse;
+    try {
+      this.http.setFollowRedirect(true);
+      planning = await this.http.post('https://web.isen-ouest.fr/webAurion/faces/MainMenuPage.xhtml', {
+      'form': 'form',
+      'form:largeurDivCenter': '898',
+      'javax.faces.ViewState': viewstate,
+      'form:sidebar_menuid': menuid,
+      'form:sidebar': 'form:sidebar',
+      'form:sauvegarde': '',
+    }, {});
+
+    if(planning.url !== "https://web.isen-ouest.fr/webAurion/faces/Planning.xhtml") throw new Error("Unexpected page");
+    } catch(error) {
+      throw error;
+    } finally {
+      this.http.setFollowRedirect(false);
+    }
+
+    let parsedPlanning = this.domParser.parseFromString(planning.data, 'text/html');
     viewstate = (<HTMLInputElement>parsedPlanning.getElementsByName('javax.faces.ViewState')[0]).value;
     let idt = (<HTMLDivElement>parsedPlanning.getElementsByClassName("schedule")[0]).id;
 
     // Generate custom planning
-    const payloadCustomPlanning = new HttpParams()
-      .set('form', 'form')
-      .set('javax.faces.partial.ajax', 'true')
-      .set('javax.faces.source', idt)
-      .set('javax.faces.partial.execute', idt)
-      .set('javax.faces.partial.render', idt)
-      .set('form:largeurDivCenter', '1603')
-      .set(idt, idt)
-      .set(idt + '_start', range.start.getTime().toString())
-      .set(idt + '_end', range.end.getTime().toString())
-      .set(idt + '_view', 'month')
-      .set('javax.faces.ViewState', viewstate);
-    let customPlanning = await this.http.post('https://web.isen-ouest.fr/webAurion/faces/Planning.xhtml', payloadCustomPlanning, options).toPromise();
-    let parsedCustomPlanning = this.domParser.parseFromString(customPlanning, 'text/xml');
+    let customPlanning = await this.http.post('https://web.isen-ouest.fr/webAurion/faces/Planning.xhtml', {
+      'form': 'form',
+      'javax.faces.partial.ajax': 'true',
+      'javax.faces.source': idt,
+      'javax.faces.partial.execute': idt,
+      'javax.faces.partial.render': idt,
+      'form:largeurDivCenter': '1603',
+      [`${idt}`]: idt,
+      [`${idt}_start`]: range.start.getTime().toString(),
+      [`${idt}_end`]: range.end.getTime().toString(),
+      [`${idt}_view`]: 'month',
+      'javax.faces.ViewState': viewstate,
+    }, {});
+    let parsedCustomPlanning = this.domParser.parseFromString(customPlanning.data, 'text/xml');
     let rawJsonPlanning = (<HTMLElement>parsedCustomPlanning.getElementById(idt)).textContent;
     let parsedJsonPlanning: { events: Event[] } = JSON.parse(rawJsonPlanning);
 
