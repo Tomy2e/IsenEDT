@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import { NavController, Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { SessionService } from './session.service';
-import { Router } from '@angular/router';
+import { Plugins } from '@capacitor/core';
+const { SplashScreen } = Plugins;
 
 @Component({
   selector: 'app-root',
@@ -51,19 +50,15 @@ export class AppComponent implements OnInit {
 
   constructor(
     private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
     private sessionService: SessionService,
     private navCtrl: NavController,
   ) {
-    this.initializeApp();
-
     this.sessionService.appMethodCallSource$.subscribe((data: string) => {
       if(data === 'login') this.setLogin();
       else if(data === 'logout') this.setLogout();
     });
 
-    if(sessionService.isConnected()) this.setLogin();
+    this.initializeApp();
   }
 
   setLogin() {
@@ -84,8 +79,8 @@ export class AppComponent implements OnInit {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      if(this.sessionService.isConnected()) this.setLogin();
+      setTimeout(() => SplashScreen.hide(), 250);
     });
   }
 
