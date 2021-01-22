@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.tomy2e.isenedt;
 
 import android.os.Bundle;
 

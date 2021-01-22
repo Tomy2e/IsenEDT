@@ -1,6 +1,6 @@
 {
   "appId": "com.tomy2e.isenedt",
-  "appName": "isenedt",
+  "appName": "IsenEDT",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
