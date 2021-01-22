@@ -12,7 +12,7 @@ import { SessionService } from '../session.service';
 })
 export class PlanningPage implements OnInit {
 
-  private planning: Day[];
+  public planning: Day[];
   constructor(
     private entService: EntService,
     private aurionService: AurionService,
