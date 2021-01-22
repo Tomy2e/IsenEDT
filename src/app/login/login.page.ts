@@ -54,8 +54,18 @@ export class LoginPage implements OnInit {
       if(login) {
         this.submitAvailable = false;
 
+        // Fetch name
         let name = await this.aurionService.getName();
 
+        // Fetch and cache planning
+        let start = new Date();
+        start.setHours(0, 0, 0, 0);
+        let end = new Date();
+        end.setDate(start.getDate() + 31 * 3); // fetch roughly 3 months
+        end.setHours(23, 59, 59, 0);
+        this.sessionService.cachePlanning(await this.aurionService.fetchEdt({start, end}));
+
+        // Persist user
         this.sessionService.create(this.username, this.password, name);
 
       } else {
