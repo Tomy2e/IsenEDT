@@ -1,0 +1,37 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Planning</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingText="Pull to refresh" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-item-group *ngFor="let p of planning">
+    <ion-item-divider color="light">
+      <ion-label>Le {{ p.humanDate }}</ion-label>
+    </ion-item-divider>
+
+    <ion-item *ngFor="let c of p.courses" lines="full">
+      <ion-label text-wrap>{{ c.de }}->{{ c.a }} - {{ c.salle }} - {{ c.matiere }} - {{ c.cours }} - {{ c.prof }} - {{ c.groupe }}</ion-label>
+    </ion-item>
+  </ion-item-group>
+
+  <ion-item-group *ngIf="planning.length > 0">
+    <ion-item-divider color="warning">
+      <ion-label text-wrap>Seuls les cours des 3 prochains mois depuis la dernière synchronisation sont disponibles</ion-label>
+    </ion-item-divider>
+  </ion-item-group>
+
+  <ion-item-group *ngIf="planning.length === 0">
+    <ion-item-divider color="warning">
+      <ion-label text-wrap>Aucun cours disponible, veuillez actualiser les données</ion-label>
+    </ion-item-divider>
+  </ion-item-group>
+</ion-content>

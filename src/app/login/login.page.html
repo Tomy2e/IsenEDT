@@ -1,0 +1,35 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Connexion</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card> 
+    <ion-card-content>
+      Veuillez saisir vos identifiants de connexion à l'ENT de l'ISEN Ouest
+      (ce sont également ceux utilisés pour se connecter au Wifi de l'ISEN).
+    </ion-card-content>
+  </ion-card>
+
+  <ion-item-group>
+    <ion-item>
+      <ion-label position="floating">Nom d'utilisateur</ion-label>
+      <ion-input [(ngModel)]="username" [disabled]="!submitAvailable"></ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label position="floating">Mot de passe</ion-label>
+      <ion-input [(ngModel)]="password" type="password" [disabled]="!submitAvailable"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" (click)="login()" *ngIf="submitAvailable">Se connecter</ion-button>
+    <ion-progress-bar type="indeterminate" *ngIf="!submitAvailable"></ion-progress-bar>
+
+  </ion-item-group>
+
+
+</ion-content>
