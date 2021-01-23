@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController } from '@ionic/angular';
-import { AurionService } from '../aurion.service';
-import { EntService } from '../ent.service';
-import { AnalyticsService } from '../services/analytics.service';
-import { SessionService } from '../session.service';
+import { AurionService } from '../../services/aurion.service';
+import { EntService } from '../../services/ent.service';
+import { AnalyticsService } from '../../services/analytics.service';
+import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'app-login',

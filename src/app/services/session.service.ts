@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/internal/Subject';
-import { Day } from './day';
+import { Day } from '../interfaces/day';
 
 @Injectable({
   providedIn: 'root'

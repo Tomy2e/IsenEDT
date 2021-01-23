@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HTTP, HTTPResponse } from '@ionic-native/http/ngx';
-import { Course } from './course';
-import { Day } from './day';
-import { Event } from './event'
+import { Course } from '../interfaces/course';
+import { Day } from '../interfaces/day';
+import { Event } from '../interfaces/event'
 
 @Injectable({
   providedIn: 'root'

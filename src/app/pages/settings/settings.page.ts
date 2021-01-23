@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AnalyticsService } from '../services/analytics.service';
-import { SessionService } from '../session.service';
+import { AnalyticsService } from '../../services/analytics.service';
+import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'app-settings',
