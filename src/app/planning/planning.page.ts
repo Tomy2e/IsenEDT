@@ -3,6 +3,7 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { AurionService } from '../aurion.service';
 import { Day } from '../day';
 import { EntService } from '../ent.service';
+import { AnalyticsService } from '../services/analytics.service';
 import { SessionService } from '../session.service';
 
 @Component({
@@ -20,6 +21,7 @@ export class PlanningPage implements OnInit {
     private sessionService: SessionService,
     private toastController: ToastController,
     private alertController: AlertController,
+    private analyticsService: AnalyticsService,
   ) {
     this.planning = this.sessionService.getPlanning();
     this.lastUpdate = this.sessionService.getPlanningUpdateElapsed();
@@ -47,6 +49,10 @@ export class PlanningPage implements OnInit {
         this.sessionService.cachePlanning(this.planning);
 
         this.lastUpdate = "à l'instant";
+
+        this.analyticsService.logEvent('fetch_planning', {
+          success: "yes",
+        });
       } else {
         // Logout user
         this.sessionService.remove();
@@ -56,6 +62,10 @@ export class PlanningPage implements OnInit {
           duration: 3000
         });
         toast.present();
+
+        this.analyticsService.logEvent('logout', {
+          reason: "expired credentials",
+        });
       }
     } catch(error) {
       let details = (error.error) ? error.error : "unknown";
@@ -65,6 +75,11 @@ export class PlanningPage implements OnInit {
         buttons: ['OK']
       });
       await alert.present();
+
+      this.analyticsService.logEvent('fetch_planning', {
+        success: "no",
+        error: "global",
+      });
     } finally {
       event.target.complete();
     }

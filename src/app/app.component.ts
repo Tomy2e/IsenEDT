@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, Platform } from '@ionic/angular';
 import { SessionService } from './session.service';
 import { Plugins } from '@capacitor/core';
+import { AnalyticsService } from './services/analytics.service';
 const { SplashScreen } = Plugins;
 
 @Component({
@@ -52,12 +53,15 @@ export class AppComponent implements OnInit {
     private platform: Platform,
     private sessionService: SessionService,
     private navCtrl: NavController,
+    private analyticsService: AnalyticsService,
   ) {
     this.sessionService.appMethodCallSource$.subscribe((data: string) => {
       if(data === 'login') this.setLogin();
       else if(data === 'logout') this.setLogout();
     });
 
+    this.analyticsService.setCollectionEnabled(this.sessionService.getTrackingConsent());
+    
     this.initializeApp();
   }
 
@@ -75,6 +79,9 @@ export class AppComponent implements OnInit {
 
   logoutPrompt() {
     this.sessionService.remove();
+    this.analyticsService.logEvent('logout', {
+      reason: "disconnect button",
+    });
   }
 
   initializeApp() {

@@ -34,5 +34,12 @@ $ ionic capacitor run android -l --host=192.168.1.15
 L'application peut être [débuggée via la console Chrome](https://ionicframework.com/docs/developing/android#using-chrome-devtools)
 lorsque l'appareil Android est connecté à l'ordinateur, il suffit pour cela d'ouvrir un nouvel onglet et accéder à la page `chrome://inspect`.
 
+## Firebase Analytics
+Le plugin Capacitor [Firebase Analytics](https://github.com/capacitor-community/firebase-analytics) est intégré à l'application
+afin de mesurer son audience. Le tracking peut être désactivé au moment de la connexion et dans l'onglet `Paramètres` une fois authentifié.
+
+Ce plugin nécessite un fichier `google-services.json` fourni par [Firebase](https://console.firebase.google.com/) qui doit être placé
+dans le répertoire `/android/app`.
+
 ## Contributions
 Les contributions se font directement via les Pull Requests du dépôt GitHub.

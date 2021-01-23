@@ -35,6 +35,12 @@
           <ion-input [(ngModel)]="password" type="password" [disabled]="!submitAvailable"></ion-input>
         </ion-item>
     
+        <ion-item>
+          <ion-label>Autoriser Firebase Analytics</ion-label>
+          <ion-button (click)="presentAlert()"><ion-icon slot="icon-only" ios="help-outline" md="help-sharp"></ion-icon></ion-button>
+          <ion-checkbox (ionChange)="updateConsent()" slot="end" [(ngModel)]="trackingConsent" [disabled]="!submitAvailable"></ion-checkbox>
+        </ion-item>
+
         <ion-button class="ion-margin-top" expand="block" (click)="login()" *ngIf="submitAvailable">Se connecter</ion-button>
         <ion-progress-bar class="ion-margin-top" type="indeterminate" *ngIf="!submitAvailable"></ion-progress-bar>
     

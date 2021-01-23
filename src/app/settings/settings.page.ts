@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AnalyticsService } from '../services/analytics.service';
+import { SessionService } from '../session.service';
 
 @Component({
   selector: 'app-settings',
@@ -7,7 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingsPage implements OnInit {
 
-  constructor() { }
+  trackingConsent: boolean;
+
+  constructor(private sessionService: SessionService, private analyticsService: AnalyticsService) {
+    this.trackingConsent = this.sessionService.getTrackingConsent();
+  }
+
+  updateTrackingConsent() {
+    this.sessionService.setTrackingConsent(this.trackingConsent);
+    this.analyticsService.setCollectionEnabled(this.trackingConsent);
+  }
 
   ngOnInit() {
   }

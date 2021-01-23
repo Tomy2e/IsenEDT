@@ -25,6 +25,14 @@ export class SessionService {
     );
   }
 
+  public setTrackingConsent(consent: boolean) {
+    localStorage.setItem('tracking_consent', (consent) ? "true" : "false");
+  }
+
+  public getTrackingConsent() {
+    return localStorage.getItem('tracking_consent') === "true";
+  }
+
   public getName() {
     return localStorage.getItem('isen_name');
   }

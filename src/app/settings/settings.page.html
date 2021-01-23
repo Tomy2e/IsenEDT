@@ -8,5 +8,16 @@
 </ion-header>
 
 <ion-content>
-  <p>Work in progress</p>
+  <ion-list>
+    <ion-item-divider>
+      <ion-label>
+        Consentement
+      </ion-label>
+    </ion-item-divider>
+
+    <ion-item>
+      <ion-label>Suivi Firebase  Analytics</ion-label>
+      <ion-toggle [(ngModel)]="trackingConsent" (ionChange)="updateTrackingConsent()"></ion-toggle>
+    </ion-item>
+  </ion-list>
 </ion-content>
