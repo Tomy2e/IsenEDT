@@ -48,7 +48,7 @@ export class AurionService {
       // If corresponding day does not exist, create new day
       if(day === undefined) day = days[days.push({
         date: new Date(course.start.toDateString()),
-        humanDate: course.start.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }),
+        humanDate: course.start.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" }),
         courses: [],
       }) - 1];
 
