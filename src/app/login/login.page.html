@@ -8,28 +8,38 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-card> 
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Bienvenue sur IsenEDT v3 !</ion-card-title>
+    </ion-card-header>
     <ion-card-content>
-      Veuillez saisir vos identifiants de connexion à l'ENT de l'ISEN Ouest
-      (ce sont également ceux utilisés pour se connecter au Wifi de l'ISEN).
+      L'application a été entièrement redéveloppée et son code source est maintenant disponible
+      sur GitHub ! Toutes les contributions sont les bienvenues.
+      <ion-button class="ion-margin-top" expand="block" href="https://github.com/Tomy2e/IsenEDT"><ion-icon slot="start" name="logo-github"></ion-icon> GitHub</ion-button>
     </ion-card-content>
   </ion-card>
 
-  <ion-item-group>
-    <ion-item>
-      <ion-label position="floating">Nom d'utilisateur</ion-label>
-      <ion-input [(ngModel)]="username" [disabled]="!submitAvailable"></ion-input>
-    </ion-item>
-  
-    <ion-item>
-      <ion-label position="floating">Mot de passe</ion-label>
-      <ion-input [(ngModel)]="password" type="password" [disabled]="!submitAvailable"></ion-input>
-    </ion-item>
-
-    <ion-button expand="block" (click)="login()" *ngIf="submitAvailable">Se connecter</ion-button>
-    <ion-progress-bar type="indeterminate" *ngIf="!submitAvailable"></ion-progress-bar>
-
-  </ion-item-group>
-
+  <ion-card class="ion-margin-top">
+    <ion-card-header>
+      <ion-card-subtitle>Veuillez saisir vos identifiants de connexion à l'ENT de l'ISEN Ouest</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item-group>    
+        <ion-item>
+          <ion-label position="floating">Nom d'utilisateur</ion-label>
+          <ion-input [(ngModel)]="username" [disabled]="!submitAvailable"></ion-input>
+        </ion-item>
+      
+        <ion-item>
+          <ion-label position="floating">Mot de passe</ion-label>
+          <ion-input [(ngModel)]="password" type="password" [disabled]="!submitAvailable"></ion-input>
+        </ion-item>
+    
+        <ion-button class="ion-margin-top" expand="block" (click)="login()" *ngIf="submitAvailable">Se connecter</ion-button>
+        <ion-progress-bar class="ion-margin-top" type="indeterminate" *ngIf="!submitAvailable"></ion-progress-bar>
+    
+      </ion-item-group>
+    </ion-card-content>
+  </ion-card>
 
 </ion-content>
