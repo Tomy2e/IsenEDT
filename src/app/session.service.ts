@@ -58,7 +58,49 @@ export class SessionService {
 
   public cachePlanning(planning: Day[]) {
     localStorage.setItem('isen_planning_cache', JSON.stringify(planning));
-    localStorage.setItem('isen_planning_update', new Date().getTime().toString());
+    localStorage.setItem('isen_planning_update', new Date().toString());
+  }
+
+  public getPlanningUpdate(): Date {
+    let update = localStorage.getItem('isen_planning_update');
+
+    if(update === null) return null;
+    else return new Date(update);
+  }
+
+  public getPlanningUpdateElapsed() {
+    let date = this.getPlanningUpdate();
+
+    if(date === null) return "jamais";
+    else return "il y a " + this.timeSince(date);
+  }
+
+  // From: https://stackoverflow.com/a/3177838
+  private timeSince(date: Date) {
+    var seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
+    var interval = seconds / 31536000;
+
+    if (interval > 1) {
+      return Math.floor(interval) + " années";
+    }
+    interval = seconds / 2592000;
+    if (interval > 1) {
+      return Math.floor(interval) + " mois";
+    }
+    interval = seconds / 86400;
+    if (interval > 1) {
+      return Math.floor(interval) + " jours";
+    }
+    interval = seconds / 3600;
+    if (interval > 1) {
+      return Math.floor(interval) + " heures";
+    }
+    interval = seconds / 60;
+    if (interval > 1) {
+      return Math.floor(interval) + " minutes";
+    }
+
+    return Math.floor(seconds) + " secondes";
   }
 
   // From: https://weblog.west-wind.com/posts/2014/jan/06/javascript-json-date-parsing-and-real-dates

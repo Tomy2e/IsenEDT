@@ -13,6 +13,7 @@ import { SessionService } from '../session.service';
 export class PlanningPage implements OnInit {
 
   public planning: Day[];
+  public lastUpdate: string;
   constructor(
     private entService: EntService,
     private aurionService: AurionService,
@@ -21,7 +22,7 @@ export class PlanningPage implements OnInit {
     private alertController: AlertController,
   ) {
     this.planning = this.sessionService.getPlanning();
-    console.log(this.planning);
+    this.lastUpdate = this.sessionService.getPlanningUpdateElapsed();
   }
 
   ngOnInit() {
@@ -45,8 +46,7 @@ export class PlanningPage implements OnInit {
         
         this.sessionService.cachePlanning(this.planning);
 
-        console.log(this.planning);
-
+        this.lastUpdate = "à l'instant";
       } else {
         // Logout user
         this.sessionService.remove();

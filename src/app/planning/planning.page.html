@@ -13,6 +13,12 @@
     </ion-refresher-content>
   </ion-refresher>
 
+  <ion-item-group>
+    <ion-item-divider color="medium">
+      <ion-label text-wrap>Dernière synchronisation: {{ lastUpdate }}</ion-label>
+    </ion-item-divider>
+  </ion-item-group>
+
   <ion-item-group *ngFor="let p of planning">
     <ion-item-divider color="light">
       <ion-label>Le {{ p.humanDate }}</ion-label>
