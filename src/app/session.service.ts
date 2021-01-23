@@ -14,7 +14,6 @@ export class SessionService {
     localStorage.setItem('isen_username', username);
     localStorage.setItem('isen_password', password);
     localStorage.setItem('isen_name', name);
-    this.renewCookieExpire();
     this.appMethodCallSource.next('login');
   }
 
@@ -36,19 +35,6 @@ export class SessionService {
 
   public getPassword() {
     return localStorage.getItem('isen_password');
-  }
-
-  public getCookieExpire() {
-    let ce = localStorage.getItem('isen_cookie_expire');
-    return ce === null ? 0 : parseInt(ce);
-  }
-
-  public isCookieExpired() {
-    return this.getCookieExpire() < new Date().getTime();
-  }
-
-  public renewCookieExpire() {
-    localStorage.setItem('isen_cookie_expire', (new Date().getTime() + 300 * 1000).toString());
   }
 
   public remove(): void {
@@ -127,7 +113,10 @@ export class SessionService {
 
     let planning: Day[] = JSON.parse(cache, this.dateParser);
 
-    return planning.filter(d => d.date >= new Date());
+    let today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return planning.filter(d => d.date >= today);
   }
 
 
