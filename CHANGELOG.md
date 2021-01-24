@@ -2,6 +2,8 @@
 Ce fichier contient l'historique des changements de la version 3 de l'application.
 
 ## [Non publié]
+
+## [3.0.0] - 2021-01-24
 ### Ajouté
 - Page de paramètres.
 - Suivi Firebase Analytics désactivable.
